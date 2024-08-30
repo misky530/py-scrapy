@@ -2,7 +2,7 @@ import requests
 from lxml import html
 
 # 指定要爬取的网页URL
-url = "https://coding.imooc.com/class/892.html"
+url = "https://coding.imooc.com/class/768.html"
 
 # 发送HTTP GET请求以获取网页内容
 response = requests.get(url)
@@ -15,8 +15,10 @@ if response.status_code == 200:
     # 使用XPath获取所有的父级元素
     parents = tree.xpath("//*[contains(@class, 'catague-item')]")
 
+    t_count = 0
     # 遍历每一个父级元素
     for parent in parents:
+        t_count += 1
         # 在当前父级元素中提取子元素
         # title = parent.xpath("//*[contains(@class, 'left')]")  # 获取标题内容
         title = parent.xpath(
@@ -31,9 +33,10 @@ if response.status_code == 200:
                           c, t in zip(content_list, time_list)]
 
         # 遍历打印标题和段落内容
+
         for t in title:
-            print(t.strip().replace('\n', ''))
+            tt = f"{t_count}. {t.strip().replace('\n', '')}"
         for paragraph in combined_texts:
-            print(f"{paragraph.strip().replace('\n', '')}")
+            print(f"{tt}${paragraph.strip().replace('\n', '')}")
 else:
     print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
